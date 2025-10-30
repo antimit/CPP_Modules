@@ -12,7 +12,7 @@ class HumanA
    
 
     public:
-    void attack();
+    void attack()const;
     HumanA(std::string name, Weapon &weapon);
     ~HumanA();
 

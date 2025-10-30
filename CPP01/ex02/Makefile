@@ -1,4 +1,4 @@
-NAME     = zombie
+NAME     = reference
 CXX      = c++
 CXXFLAGS = -g -Wall -Wextra -Werror -std=c++98
 

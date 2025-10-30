@@ -1,8 +1,13 @@
 #include "HumanB.hpp"
 
 
-void HumanB::attack()
+void HumanB::attack()const
 {
+    if (!weapon) 
+    {
+        std::cout << name << " has no weapon" << std::endl;
+        return;
+    }
     std::cout << this->name<< " attacks with their " << this->weapon->getType()<<std::endl;
 }
 
@@ -20,7 +25,7 @@ HumanB::~HumanB()
 
 }
 
-HumanB::HumanB()
+HumanB::HumanB() :name(),weapon(NULL)
 {
 
 }

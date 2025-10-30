@@ -12,7 +12,7 @@ class HumanB
     
 
     public:
-    void attack();
+    void attack() const;
     void setWeapon(Weapon &weapon);
     HumanB(std::string name);
     HumanB();

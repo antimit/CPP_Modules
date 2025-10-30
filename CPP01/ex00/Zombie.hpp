@@ -12,13 +12,13 @@ class Zombie {
         Zombie();
 		~Zombie();
 
-        void	announce();
+        void	announce() const;
 
         //setters
         void set_name(std::string name);
 
         //getters
-        std::string get_name();
+        std::string get_name()const; 
 	private:
 		
 		str	name;
