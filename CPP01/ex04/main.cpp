@@ -8,15 +8,15 @@ static void replace_all(str &line, const str &s1, const str &s2) {
     if (s1.empty())
     {
         std::cout << "Warning: s1 is empty, no replacements made.\n";
-        return; // Guarded in main too; here it's a no-op for safety.
+        return;
     }
         
 
     std::string::size_type pos = 0;
     while ((pos = line.find(s1, pos)) != std::string::npos) {
         line = line.substr(0, pos) + s2 + line.substr(pos + s1.length());
-        pos += s2.length(); // advance past the inserted text
-        std::cout << "Replaced occurrence at position: " << pos <<"    line is" << line<< std::endl; // Debug output
+        pos += s2.length();
+        std::cout << "Replaced occurrence at position: " << pos <<"    line is" << line<< std::endl;
     }
 }
 
@@ -52,8 +52,8 @@ int main(int ac, char **av) {
     str line;
     while (std::getline(input, line)) {
         replace_all(line, s1, s2);
-        std::cout << "Processed line: " << line << std::endl; // Debug output
-        std::cout<< "Replacing \"" << s1 << "\" with \"" << s2 << "\"\n"; // Debug output
+        std::cout << "Processed line: " << line << std::endl; 
+        std::cout<< "Replacing \"" << s1 << "\" with \"" << s2 << "\"\n"; 
         output << line;
         if (!input.eof())
             output << '\n';
