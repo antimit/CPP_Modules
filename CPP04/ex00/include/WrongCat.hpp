@@ -12,7 +12,7 @@ class WrongCat : public WrongAnimal
     
     ~WrongCat();
 
-    void makeSound();
+    void makeSound() const;
 };
 
 #endif

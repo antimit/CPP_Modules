@@ -1,4 +1,5 @@
 #include "Brain.hpp"
+#include <stdexcept>
 
 
 Brain::Brain()
@@ -21,10 +22,24 @@ Brain & Brain::operator=(Brain const &src)
 {
     if(this!=&src)
     {
-        for (size_t i = 0; i < 100; i++)
+        for (std::size_t i = 0; i < 100; i++)
         {
             this->ideas[i] = src.ideas[i];
         }    
     }
     return *this;
+}
+
+void Brain::setIdea(std::size_t index, std::string const &idea)
+{
+    if (index >= 100)
+        throw std::out_of_range("Brain idea index out of range");
+    ideas[index] = idea;
+}
+
+std::string const &Brain::getIdea(std::size_t index) const
+{
+    if (index >= 100)
+        throw std::out_of_range("Brain idea index out of range");
+    return ideas[index];
 }

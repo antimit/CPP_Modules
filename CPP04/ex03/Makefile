@@ -1,8 +1,8 @@
-NAME     = Animal
+NAME     = Materia
 CXX      = c++
 CXXFLAGS = -I include -Wall -Wextra -Werror -std=c++98 -g
 
-SRC = main.cpp src/Animal.cpp src/Cat.cpp src/Dog.cpp src/WrongAnimal.cpp src/WrongCat.cpp
+SRC = main.cpp src/AMateria.cpp src/Character.cpp src/Cure.cpp src/Ice.cpp src/MateriaSource.cpp 
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)

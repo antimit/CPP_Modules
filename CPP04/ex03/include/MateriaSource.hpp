@@ -2,20 +2,13 @@
 #define MATERIASOURCE_HPP
 
 #include "AMateria.hpp"
+#include "IMateriaSource.hpp"
 
-class IMateriaSource
+class ICharacter;
+
+class MateriaSource :  public IMateriaSource
 {
     public:
-    virtual ~IMateriaSource();
-    virtual void getMemory() const = 0;
-
-    virtual void    learnMaterial(AMateria * materia) = 0;
-    virtual AMateria *      createMateria(std::string const & type);
-};
-
-
-class MateriaSource : public IMateriaSource
-{
     MateriaSource();
     MateriaSource(MateriaSource const & src);
     virtual ~MateriaSource();

@@ -3,6 +3,7 @@
 
 Animal::Animal()
 {
+    type = "Animal";
     std::cout<<"Default Animal constructor was called"<<std::endl;
 }
 

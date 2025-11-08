@@ -2,7 +2,7 @@
 #define CAT_HPP
 #include "Animal.hpp"
 
-class Cat:public virtual  Animal 
+class Cat : public Animal 
 {
     public:
     //The Orthodox Canonical Class Form

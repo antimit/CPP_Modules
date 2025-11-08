@@ -1,6 +1,8 @@
 #include "AMateria.hpp"
 
-AMateria::AMateria()
+#include "ICharacter.hpp"
+
+AMateria::AMateria() 
 {
     std::cout<<"AMateria default constructor was called"<<std::endl;
 }
@@ -34,6 +36,8 @@ std::string const& AMateria::getType()const
 {
     return this->type;
 }
+
+
 
 void AMateria::use(ICharacter& target)
 {

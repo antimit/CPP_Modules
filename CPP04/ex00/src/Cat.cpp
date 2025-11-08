@@ -2,6 +2,7 @@
 
 Cat::Cat()
 {
+    type = "Cat";
     std::cout<<"Default Cat constructor was called"<<std::endl;
 }
 
@@ -12,7 +13,8 @@ Cat::~Cat()
 
 Cat::Cat(Cat const & src) : Animal::Animal(src)
 {
-   std::cout<<"Cat copy constructor was called"<<std::endl;
+     type = src.type;
+    std::cout<<"Cat copy constructor was called"<<std::endl;
 }
 
 Cat & Cat::operator=(Cat const & src)

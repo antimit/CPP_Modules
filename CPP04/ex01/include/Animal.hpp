@@ -12,8 +12,8 @@ class Animal
     virtual ~Animal();
 
     //Member functions
-    void makeSound()const;
-    std::string getType() const;
+    virtual void makeSound()const;
+    virtual std::string getType() const;
 
     protected:
     std::string type;

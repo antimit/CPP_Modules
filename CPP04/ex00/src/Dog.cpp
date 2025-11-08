@@ -2,6 +2,7 @@
 
 Dog::Dog()
 {
+    type = "Dog";
     std::cout<<"Default Dog constructor was called"<<std::endl;
 }
 
@@ -22,6 +23,7 @@ Dog & Dog::operator=(Dog const & src)
 
 Dog::Dog(Dog const & src) : Animal::Animal(src)
 {
+    type = src.type;
     std::cout<<"Dog copy constructor was called"<<std::endl;
 }
 

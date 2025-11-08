@@ -11,7 +11,7 @@ class WrongAnimal
     ~WrongAnimal();
     WrongAnimal & operator=(WrongAnimal const &src );
 
-    void makeSound();
+    virtual void makeSound();
 
     protected:
     std::string type;

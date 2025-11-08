@@ -3,7 +3,7 @@
 #include "Animal.hpp"
 #include "Brain.hpp"
 
-class Cat:public virtual  Animal 
+class Cat : public Animal
 {
     public:
     //The Orthodox Canonical Class Form
@@ -14,7 +14,10 @@ class Cat:public virtual  Animal
     
 
     //Member functions
-    void makeSound() const;
+    virtual void makeSound() const;
+    virtual std::string getType()const;
+    Brain *getBrain();
+    Brain const *getBrain() const;
 
 
     private:

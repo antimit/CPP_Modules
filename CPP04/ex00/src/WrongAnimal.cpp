@@ -2,6 +2,7 @@
 
 WrongAnimal::WrongAnimal()
 {
+    type = "WrongAnimal";
     std::cout<<"Default WrongAnimal constructor was called"<<std::endl;
 }
 
@@ -27,7 +28,7 @@ WrongAnimal::WrongAnimal(WrongAnimal const & src): type(src.type)
 }
 
 
-void WrongAnimal::makeSound()
+void WrongAnimal::makeSound() const
 {
     std::cout<<"Wrong animals doesnt know how to make right sound"<<std::endl;
 }

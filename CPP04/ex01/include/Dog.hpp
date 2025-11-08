@@ -4,7 +4,7 @@
 #include "Animal.hpp"
 #include "Brain.hpp"
 
-class Dog : public virtual Animal 
+class Dog : public Animal
 {
     public:
     //The Orthodox Canonical Class Form
@@ -14,7 +14,10 @@ class Dog : public virtual Animal
     Dog & operator=(Dog const & src);
 
     //MemberFunctions
-    void makeSound() const;
+    virtual void makeSound() const;
+    virtual std::string getType()const;
+    Brain *getBrain();
+    Brain const *getBrain() const;
     
     
     private:
