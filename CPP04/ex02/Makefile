@@ -2,7 +2,7 @@ NAME     = Animal
 CXX      = c++
 CXXFLAGS = -I include -Wall -Wextra -Werror -std=c++98 -g
 
-SRC = main.cpp src/Animal.cpp src/Cat.cpp src/Dog.cpp src/WrongAnimal.cpp
+SRC = main.cpp src/Animal.cpp src/Cat.cpp src/Dog.cpp src/WrongAnimal.cpp src/Brain.cpp
 OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
