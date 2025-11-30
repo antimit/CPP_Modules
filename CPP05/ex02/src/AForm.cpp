@@ -23,6 +23,11 @@ AForm & AForm::operator=(AForm const & src)
     }
 }
 
+AForm::~AForm()
+{
+    std::cout<<"AForm destructor was called"<<std::endl;
+}
+
 const char * AForm::GradeTooHighException::what() const throw()
 {
     return ("Grade is too High");
