@@ -1,4 +1,5 @@
 #include "AForm.hpp"
+#include "Bureaucrat.hpp"
 
 AForm::AForm():name("Unnamed"), gradeToSign(1), gradeToExecute(1)
 {
@@ -13,6 +14,10 @@ AForm::AForm(AForm const & src):formSigned(src.formSigned), gradeToSign(1), grad
 AForm::AForm(std::string const & name, const int & gradeToSign, const int & gradeToExecute): name(name), gradeToSign(gradeToSign), gradeToExecute(gradeToExecute)
 {
     std::cout<<"AForm constructor was called"<<std::endl;
+    if(gradeToSign < Bureaucrat::highestGrade || gradeToExecute < Bureaucrat::highestGrade)
+        throw(AForm::GradeTooHighException());
+    if(gradeToSign > Bureaucrat::lowestGrade || gradeToExecute > Bureaucrat::lowestGrade)
+        throw(AForm::GradeTooHighException());
 }
 
 AForm & AForm::operator=(AForm const & src)
@@ -46,4 +51,32 @@ const char * AForm::AlreadySignedException::what() const throw()
 const char * AForm::NotSignedException::what() const throw()
 {
     return("Form hasn't been signed yet");
+}
+
+
+void    AForm::beSigned(Bureaucrat const & bureaucrat)
+{
+    if(this->formSigned)
+    {
+        throw(AForm::AlreadySignedException());
+    }
+    if(bureaucrat.getGrade() < this->gradeToSign)
+        throw (AForm::GradeTooLowException());
+
+    this->formSigned = true;
+}
+
+
+void    AForm::execute(Bureaucrat const & bureaucrat)
+{
+    if(this->formSigned == false)
+        throw(AForm::NotSignedException());
+
+    if(bureaucrat.getGrade() < this->gradeToExecute)
+    {
+        throw(AForm::GradeTooLowException());
+    }
+
+    this->beExecuted();
+
 }

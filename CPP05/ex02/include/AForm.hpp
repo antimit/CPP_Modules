@@ -12,6 +12,9 @@ public:
     ~AForm();
     AForm & operator=(AForm const & src);
 
+    void	beSigned(Bureaucrat const & bureaucrat);
+	void	execute(Bureaucrat const & bureaucrat);
+
      class GradeTooHighException : public std::exception
     {
         const char *what() const throw();

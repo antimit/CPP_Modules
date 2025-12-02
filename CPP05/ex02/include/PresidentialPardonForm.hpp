@@ -1,8 +1,7 @@
-#ifndef PRESIDENTIAL_PARDON_FORM_CLASS_H
-#define PRESIDENTIAL_PARDON_FORM_CLASS_H
+#ifndef PRESIDENTIAL_PARDON_FORM_HPP
+#define PRESIDENTIAL_PARDON_FORM_HPP
 
 #include "AForm.hpp"
-
 
 class PresidentialPardonForm : public AForm
 {
@@ -22,7 +21,7 @@ class PresidentialPardonForm : public AForm
     static int const gradeToExecute = 5;
 
     private:
-        std::string _target;
+    std::string _target;
 };
 
 #endif

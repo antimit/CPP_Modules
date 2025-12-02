@@ -1,5 +1,5 @@
-#ifndef ROBOTOMY_REQUEST_FORM_CLASS_H
-#define ROBOTOMY_REQUEST_FORM_CLASS_H
+#ifndef ROBOTOMY_REQUEST_FORM_HPP
+#define ROBOTOMY_REQUEST_FORM_HPP
 
 #include "AForm.hpp"
 
@@ -17,8 +17,8 @@ class RobotomyRequestForm: public AForm
 
     void beExecuted() const;
 
-    static int const    gradeToSign = 72;
-    static int const    gradeToExecute = 45;
+    static int const gradeToSign = 72;
+    static int const gradeToExecute = 45;
 
     private:
     std::string _target;
