@@ -1,4 +1,5 @@
 #include "Bureaucrat.hpp"
+#include "AForm.hpp"
 
 Bureaucrat::Bureaucrat(): name_("Unnamed Bureaucrat"), grade_(150)
 {
@@ -9,9 +10,9 @@ Bureaucrat::Bureaucrat(std::string const &name, int const & grade) : name_(name)
 {
     std::cout << "Bureaucrat constructor was called"<<std::endl;
 
-    if(grade< MAX_GRADE)
+    if(grade < Bureaucrat::highestGrade)
         throw Bureaucrat::GradeTooHighException();
-    if(grade > MIN_GRADE)
+    if(grade > Bureaucrat::lowestGrade)
         throw Bureaucrat::GradeTooLowException();
     
     this->grade_ = grade;
@@ -78,17 +79,30 @@ std::ostream & operator<<(std::ostream & os, const Bureaucrat &obj)
     return os;
 }
 
-void Bureaucrat::signForm(Form & form) 
+void Bureaucrat::signForm(AForm & form) const
 {
     try
     {
         form.beSigned(*this);
-        std::cout<< "Bureaucrat: " << this->getName()<<" signed the form: "<<form.getName()<<" has been signed"<<std::endl;
+        std::cout<< "Bureaucrat: " << this->getName()<<" signed the form: "<<form.getName()<<std::endl;
 
     }
     catch(const std::exception& e)
     {
-        std::cout<< "Bureaucrat couldn't " << this->getName()<<" sign the form: "<<form.getName()<<" because"<<e.what()<<std::endl;
+        std::cout<< "Bureaucrat " << this->getName()<<" couldn't sign the form: "<<form.getName()<<" because "<<e.what()<<std::endl;
+    }
+    
+}
+
+void Bureaucrat::executeForm(AForm & form) const
+{
+    try
+    {
+        form.execute(*this);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
     }
     
 }
