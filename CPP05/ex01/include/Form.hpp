@@ -39,7 +39,7 @@ class Form{
         const char * what() const throw();
     };
 
-    void beSigned(Bureaucrat &obj);
+    void beSigned(Bureaucrat const &obj);
     
 };
 

@@ -1,9 +1,10 @@
 #include "Form.hpp"
 #include "Bureaucrat.hpp"
 
+#define HIGHEST_GRADE 1
+#define LOWEST_GRADE 150
 
-
-Form::Form() : name("Unnamed form"), gradeToSign(1), gradeToExecute(1)
+Form::Form() : name("Unnamed form"), formSigned(false), gradeToSign(1), gradeToExecute(1)
 {
     std::cout<<"Default Form constructor was called"<<std::endl;
 }
@@ -13,9 +14,13 @@ Form::Form(const Form & other):name(other.name), formSigned(other.formSigned), g
     std::cout<<"Copy constructor was called"<<std::endl;
 }
 
-Form::Form(std::string const & name, const int & gradeToSign, const int & gradeToExecute ) : name(name), gradeToSign(gradeToSign), gradeToExecute(gradeToExecute)
+Form::Form(std::string const & name, const int & gradeToSign, const int & gradeToExecute ) : name(name), formSigned(false), gradeToSign(gradeToSign), gradeToExecute(gradeToExecute)
 {
-    std::cout<<"From constructor was called"<<std::endl;
+    std::cout<<"Form constructor was called"<<std::endl;
+    if (gradeToSign < HIGHEST_GRADE || gradeToExecute < HIGHEST_GRADE)
+        throw Form::GradeTooHighException();
+    if (gradeToSign > LOWEST_GRADE || gradeToExecute > LOWEST_GRADE)
+        throw Form::GradeTooLowException();
 }
 
 Form & Form::operator=(const Form &other)
@@ -40,16 +45,13 @@ int Form::getGradeToExecute()const{return this->gradeToExecute;}
 int Form::getGradeToSign()const{return this->gradeToSign;}
 bool Form::getSignedValue()const{return this->formSigned;}
 
-void Form::beSigned(Bureaucrat & bureaucrat)
+void Form::beSigned(Bureaucrat const & bureaucrat)
 {
-    if(bureaucrat.getGrade() <= this->gradeToSign)
-    {
-        this->formSigned = true;
-    }
-    else
+    if(bureaucrat.getGrade() > this->gradeToSign)
     {
         throw GradeTooLowException();
     }
+    this->formSigned = true;
 }
 
 const char * Form::GradeTooHighException::what() const throw()
