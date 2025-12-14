@@ -16,13 +16,12 @@ class ShrubberyCreationForm : public AForm
 
     std::string const & getTarget() const;
 
-    void beExecuted() const;
-
     static int const gradeToSign = 145;
     static int const gradeToExecute = 137;
 
     private:
     std::string _target;
+    void beExecuted() const;
 };
 
 #endif

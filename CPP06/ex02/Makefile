@@ -1,40 +1,24 @@
-# Source Files
-SRCS = main.cpp Base.cpp
+NAME = ex02
 
-# Source Files Prefix
-SRCS := $(addprefix src/, $(SRCS))
-
-# Include Folder
-INCLUDES = ./include
-
-# Object Files
-OBJS = $(SRCS:.cpp=.o)
-
-# Program Name
-NAME = $(shell basename $(CURDIR))
-
-# Compiler
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I$(INCLUDES)
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I include
 
-# Remove Command
-RM = rm -f
+SRCS = src/main.cpp src/Base.cpp
+
+OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
-
-debug: CXXFLAGS += -g -fsanitize=address
-debug: fclean all
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-	$(RM) $(OBJS)
+	rm -f $(OBJS)
 
 fclean: clean
-	$(RM) $(NAME)
+	rm -f $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re
+

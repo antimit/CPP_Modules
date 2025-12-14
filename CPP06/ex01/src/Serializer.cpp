@@ -2,9 +2,12 @@
 
 Serializer::Serializer()
 {
-    std::cout<<"Default Serialize constructor was called"<<std::endl;
 }
 
+Serializer::Serializer(Serializer const & src)
+{
+    (void)src;
+}
 
 Serializer & Serializer::operator=(Serializer const & src)
 {
@@ -15,7 +18,6 @@ Serializer & Serializer::operator=(Serializer const & src)
 
 Serializer::~Serializer()
 {
-    std::cout<<"Default Serialize destructor was called"<<std::endl;
 }
 
 uintptr_t Serializer::serialize(Data *ptr)

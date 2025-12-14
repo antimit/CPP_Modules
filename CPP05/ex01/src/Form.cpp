@@ -4,6 +4,14 @@
 #define HIGHEST_GRADE 1
 #define LOWEST_GRADE 150
 
+static void validateGrade(int grade)
+{
+    if (grade < HIGHEST_GRADE)
+        throw Form::GradeTooHighException();
+    if (grade > LOWEST_GRADE)
+        throw Form::GradeTooLowException();
+}
+
 Form::Form() : name("Unnamed form"), formSigned(false), gradeToSign(1), gradeToExecute(1)
 {
     std::cout<<"Default Form constructor was called"<<std::endl;
@@ -14,13 +22,9 @@ Form::Form(const Form & other):name(other.name), formSigned(other.formSigned), g
     std::cout<<"Copy constructor was called"<<std::endl;
 }
 
-Form::Form(std::string const & name, const int & gradeToSign, const int & gradeToExecute ) : name(name), formSigned(false), gradeToSign(gradeToSign), gradeToExecute(gradeToExecute)
+Form::Form(std::string const & name, const int & gradeToSign, const int & gradeToExecute ) : name(name), formSigned(false), gradeToSign((validateGrade(gradeToSign), gradeToSign)), gradeToExecute((validateGrade(gradeToExecute), gradeToExecute))
 {
     std::cout<<"Form constructor was called"<<std::endl;
-    if (gradeToSign < HIGHEST_GRADE || gradeToExecute < HIGHEST_GRADE)
-        throw Form::GradeTooHighException();
-    if (gradeToSign > LOWEST_GRADE || gradeToExecute > LOWEST_GRADE)
-        throw Form::GradeTooLowException();
 }
 
 Form & Form::operator=(const Form &other)
@@ -41,8 +45,8 @@ Form::~Form()
 
 
 const std::string Form::getName()const{return this->name;}
-int Form::getGradeToExecute()const{return this->gradeToExecute;}
-int Form::getGradeToSign()const{return this->gradeToSign;}
+unsigned int Form::getGradeToExecute()const{return this->gradeToExecute;}
+unsigned int Form::getGradeToSign()const{return this->gradeToSign;}
 bool Form::getSignedValue()const{return this->formSigned;}
 
 void Form::beSigned(Bureaucrat const & bureaucrat)
@@ -66,6 +70,8 @@ const char * Form::GradeTooLowException::what() const throw()
 
 std::ostream & operator<<(std::ostream & os, const Form & obj)
 {
-    os<<obj.getName()<< ", form's gradeToExecute: "<<obj.getGradeToExecute()<<", form's gradeToSign"<<obj.getGradeToSign()<<", isFormSigned: "<<obj.getSignedValue()<<std::endl;
+    os << obj.getName() << ", grade to sign: " << obj.getGradeToSign()
+       << ", grade to execute: " << obj.getGradeToExecute()
+       << ", signed: " << (obj.getSignedValue() ? "yes" : "no");
     return os;
 }

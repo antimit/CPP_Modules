@@ -1,24 +1,23 @@
-
 # Source Files
-SRCS = main.cpp Bureaucrat.cpp Form.cpp
+SRCS = main.cpp easyfind.cpp
 
 # Source Files Prefix
 SRCS := $(addprefix src/, $(SRCS))
-# Include Folder
-INCLUDES = "./include"
 
-# Objects Files
+# Include Folder
+INCLUDES = ./include
+
+# Object Files
 OBJS = $(SRCS:.cpp=.o)
 
-# Name Of The Compiled Program
+# Program Name
 NAME = $(shell basename $(CURDIR))
 
-# Compilation Program
+# Compiler
 CXX = c++
-# Compilation Flags
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -I$(INCLUDES)
 
-# Remove Files Command
+# Remove Command
 RM = rm -f
 
 all: $(NAME)
@@ -27,7 +26,7 @@ $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
 debug: CXXFLAGS += -g -fsanitize=address
-debug: fclean $(NAME)
+debug: fclean all
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -39,5 +38,3 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
-
-.PHONY: all clean fclean re debug

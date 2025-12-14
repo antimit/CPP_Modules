@@ -14,14 +14,13 @@ class PresidentialPardonForm : public AForm
     PresidentialPardonForm & operator=(PresidentialPardonForm const & src);
 
     std::string const & getTarget() const;
-
-    void beExecuted(void) const;
     
     static int const gradeToSign = 25;
     static int const gradeToExecute = 5;
 
     private:
     std::string _target;
+    void beExecuted(void) const;
 };
 
 #endif

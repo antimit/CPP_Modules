@@ -1,6 +1,14 @@
 #include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
+static void validateGrade(int grade)
+{
+    if (grade < Bureaucrat::highestGrade)
+        throw AForm::GradeTooHighException();
+    if (grade > Bureaucrat::lowestGrade)
+        throw AForm::GradeTooLowException();
+}
+
 AForm::AForm():name("Unnamed"), formSigned(false), gradeToSign(1), gradeToExecute(1)
 {
     std::cout<<"AForm default constructor was called"<<std::endl;
@@ -11,13 +19,9 @@ AForm::AForm(AForm const & src):name(src.name), formSigned(src.formSigned), grad
     std::cout<<"AForm copy constructor was called"<<std::endl;
 }
 
-AForm::AForm(std::string const & name, const int & gradeToSign, const int & gradeToExecute): name(name), formSigned(false), gradeToSign(gradeToSign), gradeToExecute(gradeToExecute)
+AForm::AForm(std::string const & name, const int & gradeToSign, const int & gradeToExecute): name(name), formSigned(false), gradeToSign((validateGrade(gradeToSign), gradeToSign)), gradeToExecute((validateGrade(gradeToExecute), gradeToExecute))
 {
     std::cout<<"AForm constructor was called"<<std::endl;
-    if(gradeToSign < Bureaucrat::highestGrade || gradeToExecute < Bureaucrat::highestGrade)
-        throw(AForm::GradeTooHighException());
-    if(gradeToSign > Bureaucrat::lowestGrade || gradeToExecute > Bureaucrat::lowestGrade)
-        throw(AForm::GradeTooHighException());
 }
 
 AForm & AForm::operator=(AForm const & src)

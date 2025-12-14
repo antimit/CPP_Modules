@@ -15,13 +15,12 @@ class RobotomyRequestForm: public AForm
 
     std::string const & getTarget() const;
 
-    void beExecuted() const;
-
     static int const gradeToSign = 72;
     static int const gradeToExecute = 45;
 
     private:
     std::string _target;
+    void beExecuted() const;
 };
 
 #endif

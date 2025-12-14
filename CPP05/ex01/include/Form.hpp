@@ -3,7 +3,7 @@
 #define FORM_HPP
 
 #include <iostream>
-#include <stdlib.h>
+#include <string>
 
 class Bureaucrat;
 
@@ -24,19 +24,21 @@ class Form{
 
     const std::string getName() const;
     bool getSignedValue() const;
-    int getGradeToSign() const;
-    int getGradeToExecute() const;
+    unsigned int getGradeToSign() const;
+    unsigned int getGradeToExecute() const;
 
 
     class GradeTooHighException : public std::exception
     {
-        const char *what() const throw();
+        public:
+        virtual const char *what() const throw();
     };
 
 
     class GradeTooLowException : public std::exception
     {
-        const char * what() const throw();
+        public:
+        virtual const char * what() const throw();
     };
 
     void beSigned(Bureaucrat const &obj);

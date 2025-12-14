@@ -19,7 +19,8 @@ class Intern
 
     class InvalidFormName : public std::exception
     {
-        const char * what() const throw();
+        public:
+        virtual const char * what() const throw();
     };
 
     private:

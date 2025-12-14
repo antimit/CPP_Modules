@@ -29,7 +29,7 @@ $(NAME): $(OBJS)
 debug: CXXFLAGS += -g -fsanitize=address
 debug: fclean $(NAME)
 
-%.o: %.c
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
@@ -39,3 +39,5 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+
+.PHONY: all clean fclean re debug
