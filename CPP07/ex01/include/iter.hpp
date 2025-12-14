@@ -2,15 +2,26 @@
 #define ITER_HPP
 
 #include <iostream>
+#include <cstddef>
 
+// Non-const version - for modifying array elements
 template<typename T, typename F>
-void iter(T * arr, const int len, F func)
+void iter(T *arr, size_t len, F func)
 {
-    for(int i = 0; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         func(arr[i]);
     }
 }
 
+// Const version - for read-only operations on const arrays
+template<typename T, typename F>
+void iter(T const *arr, size_t len, F func)
+{
+    for (size_t i = 0; i < len; i++)
+    {
+        func(arr[i]);
+    }
+}
 
 #endif

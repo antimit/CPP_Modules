@@ -15,11 +15,13 @@ class Array
     ~Array();
     Array & operator=(Array const & src);
 
-    unsigned int size()const;
-    T &operator[](unsigned int i);
+    unsigned int size() const;
+    T & operator[](unsigned int i);
+    T const & operator[](unsigned int i) const;
 
     class OutOfRange : public std::exception
     {
+        public:
         const char *what() const throw();
     };
 
