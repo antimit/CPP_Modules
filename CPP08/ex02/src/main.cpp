@@ -4,6 +4,7 @@
 
 int main()
 {
+    std::cout << "=== MutantStack Test ===" << std::endl;
     MutantStack<int> mstack;
 
     mstack.push(5);
@@ -33,6 +34,35 @@ int main()
     }
 
     std::stack<int> s(mstack);
+
+    std::cout << std::endl << "=== std::list Test (same operations) ===" << std::endl;
+    std::list<int> lst;
+
+    lst.push_back(5);
+    lst.push_back(17);
+
+    std::cout << lst.back() << std::endl;
+
+    lst.pop_back();
+
+    std::cout << lst.size() << std::endl;
+
+    lst.push_back(3);
+    lst.push_back(5);
+    lst.push_back(737);
+    lst.push_back(0);
+
+    std::list<int>::iterator lit = lst.begin();
+    std::list<int>::iterator lite = lst.end();
+
+    ++lit;
+    --lit;
+
+    while (lit != lite)
+    {
+        std::cout << *lit << std::endl;
+        ++lit;
+    }
 
     return 0;
 }
