@@ -8,6 +8,12 @@
 class PmergeMe
 {
   public:
+    struct ListNodeRef
+    {
+        std::list<int>::iterator it;
+        size_t idx;
+    };
+
     PmergeMe();
     PmergeMe(const PmergeMe& other);
     PmergeMe& operator=(const PmergeMe& other);
@@ -26,6 +32,7 @@ class PmergeMe
 
     // Core Ford-Johnson recursive implementation
     void mergeInsertVector(std::vector<int>& vals, std::vector<size_t>& indices);
+    void mergeInsertList(std::vector<std::list<int>::iterator>& iters, std::vector<size_t>& indices);
 };
 
 #endif

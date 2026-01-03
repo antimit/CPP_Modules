@@ -1,6 +1,7 @@
 #include "PmergeMe.hpp"
 #include <cerrno>
 #include <climits>
+#include <cctype>
 #include <cstdlib>
 #include <ctime>
 #include <iomanip>
@@ -15,13 +16,13 @@ bool validateNumber(const std::string& arg)
     
     for (size_t i = 0; i < arg.length(); i++)
     {
-        if (!isdigit(arg[i]))
+        if (!isdigit(static_cast<unsigned char>(arg[i])))
             return false;
     }
     
     errno = 0;
     long value = strtol(arg.c_str(), NULL, 10);
-    if (errno == ERANGE || value > INT_MAX || value < 0)
+    if (errno == ERANGE || value > INT_MAX || value <= 0)
         return false;
     
     return true;
@@ -99,22 +100,24 @@ int main(int argc, char** argv)
     if (!validateArguments(argc, argv))
         return 1;
     
+    PmergeMe sorter;
+    
+    clock_t vectorStart = clock();
     std::vector<int> originalData;
     parseInputToVector(argc, argv, originalData);
-    
-    displaySequence("Before: ", originalData, 5);
-    
     std::vector<int> vectorData = originalData;
-    clock_t vectorStart = clock();
-    PmergeMe sorter;
+    PmergeMe::resetComparisonCount();
     sorter.sortVector(vectorData);
+    size_t vectorComparisons = PmergeMe::getComparisonCount();
     clock_t vectorEnd = clock();
     double vectorTime = static_cast<double>(vectorEnd - vectorStart) / CLOCKS_PER_SEC * 1000000;
     
+    clock_t listStart = clock();
     std::list<int> listData;
     parseInputToList(argc, argv, listData);
-    clock_t listStart = clock();
+    PmergeMe::resetComparisonCount();
     sorter.sortList(listData);
+    size_t listComparisons = PmergeMe::getComparisonCount();
     clock_t listEnd = clock();
     double listTime = static_cast<double>(listEnd - listStart) / CLOCKS_PER_SEC * 1000000;
     
@@ -125,15 +128,18 @@ int main(int argc, char** argv)
         return 1;
     }
     
+    displaySequence("Before: ", originalData, 5);
     displaySequence("After:  ", vectorData, 5);
     
     std::cout << "Time to process a range of " << vectorData.size()
               << " elements with std::vector: " << std::fixed << std::setprecision(5)
               << vectorTime << " us\n";
+    std::cout << "Comparisons used with std::vector: " << vectorComparisons << "\n";
     
     std::cout << "Time to process a range of " << listData.size()
               << " elements with std::list:    " << std::fixed << std::setprecision(5)
               << listTime << " us\n";
+    std::cout << "Comparisons used with std::list:    " << listComparisons << "\n";
     
     return 0;
 }

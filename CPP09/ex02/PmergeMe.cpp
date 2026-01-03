@@ -80,7 +80,7 @@ void PmergeMe::sortVector(std::vector<int>& data)
     if (data.size() <= 1)
         return;
     
-    // Work with indices into original data to handle duplicates correctly
+    // Work with indices into original data to keep duplicate ordering deterministic
     std::vector<size_t> indices(data.size());
     for (size_t i = 0; i < data.size(); ++i)
         indices[i] = i;
@@ -94,14 +94,52 @@ void PmergeMe::sortVector(std::vector<int>& data)
     data = result;
 }
 
+static bool lessWithIndexTiebreak(const std::vector<int>& vals,
+                                  size_t lhsIdx,
+                                  size_t rhsIdx,
+                                  bool (*cmp)(int, int))
+{
+    bool lhsLess = cmp(vals[lhsIdx], vals[rhsIdx]);
+    if (!lhsLess && vals[lhsIdx] == vals[rhsIdx])
+        return lhsIdx < rhsIdx;
+    return lhsLess;
+}
+
 static size_t binarySearchIdx(const std::vector<int>& vals, const std::vector<size_t>& chain,
-                              int value, size_t left, size_t right,
+                              size_t valueIdx, size_t left, size_t right,
                               bool (*cmp)(int, int))
 {
     while (left < right)
     {
         size_t mid = left + (right - left) / 2;
-        if (cmp(vals[chain[mid]], value))
+        if (lessWithIndexTiebreak(vals, chain[mid], valueIdx, cmp))
+            left = mid + 1;
+        else
+            right = mid;
+    }
+    return left;
+}
+
+static bool lessWithIndexTiebreakIter(const std::vector<std::list<int>::iterator>& iters,
+                                      size_t lhsIdx,
+                                      size_t rhsIdx,
+                                      bool (*cmp)(int, int))
+{
+    bool lhsLess = cmp(*iters[lhsIdx], *iters[rhsIdx]);
+    if (!lhsLess && *iters[lhsIdx] == *iters[rhsIdx])
+        return lhsIdx < rhsIdx;
+    return lhsLess;
+}
+
+static size_t binarySearchIdx(const std::vector<std::list<int>::iterator>& iters,
+                              const std::vector<size_t>& chain,
+                              size_t valueIdx, size_t left, size_t right,
+                              bool (*cmp)(int, int))
+{
+    while (left < right)
+    {
+        size_t mid = left + (right - left) / 2;
+        if (lessWithIndexTiebreakIter(iters, chain[mid], valueIdx, cmp))
             left = mid + 1;
         else
             right = mid;
@@ -190,6 +228,13 @@ void PmergeMe::mergeInsertVector(std::vector<int>& vals, std::vector<size_t>& in
         size_t pendIdx = order[k];
         size_t valueIdx = pend[pendIdx];
 
+        // By definition, the first pend element leads the chain with zero comparisons.
+        if (pendIdx == 0)
+        {
+            mainChain.insert(mainChain.begin(), valueIdx);
+            continue;
+        }
+
         size_t boundPos;
         if (pendIdx < pairs.size())
         {
@@ -202,7 +247,114 @@ void PmergeMe::mergeInsertVector(std::vector<int>& vals, std::vector<size_t>& in
             boundPos = mainChain.size();
         }
 
-        size_t pos = binarySearchIdx(vals, mainChain, vals[valueIdx], 0, boundPos, lessThan);
+        size_t pos = binarySearchIdx(vals, mainChain, valueIdx, 0, boundPos, lessThan);
+        mainChain.insert(mainChain.begin() + pos, valueIdx);
+    }
+
+    indices = mainChain;
+}
+
+void PmergeMe::mergeInsertList(std::vector<std::list<int>::iterator>& iters, std::vector<size_t>& indices)
+{
+    size_t n = indices.size();
+    if (n <= 1)
+        return;
+
+    std::vector<FJPair> pairs;
+    pairs.reserve(n / 2);
+
+    bool hasStraggler = (n % 2 == 1);
+    size_t stragglerIdx = hasStraggler ? indices.back() : 0;
+
+    // Pair formation
+    for (size_t i = 0; i + 1 < n; i += 2)
+    {
+        size_t a = indices[i];
+        size_t b = indices[i + 1];
+        FJPair p;
+        if (lessThan(*iters[a], *iters[b]))
+        {
+            p.small = a;
+            p.large = b;
+        }
+        else
+        {
+            p.small = b;
+            p.large = a;
+        }
+        pairs.push_back(p);
+    }
+
+    // Recursively sort by larger elements to minimize comparisons
+    size_t numPairs = pairs.size();
+    if (numPairs > 1)
+    {
+        std::vector<size_t> largerIndices(numPairs);
+        for (size_t i = 0; i < numPairs; ++i)
+            largerIndices[i] = pairs[i].large;
+
+        mergeInsertList(iters, largerIndices);
+
+        // Reorder pairs to match sorted largerIndices
+        std::vector<bool> used(numPairs, false);
+        std::vector<FJPair> sortedPairs;
+        sortedPairs.reserve(numPairs);
+        for (size_t i = 0; i < numPairs; ++i)
+        {
+            size_t target = largerIndices[i];
+            for (size_t j = 0; j < numPairs; ++j)
+            {
+                if (!used[j] && pairs[j].large == target)
+                {
+                    sortedPairs.push_back(pairs[j]);
+                    used[j] = true;
+                    break;
+                }
+            }
+        }
+        pairs.swap(sortedPairs);
+    }
+
+    // Build main chain and pending inserts
+    std::vector<size_t> mainChain;
+    std::vector<size_t> pend;
+
+    for (size_t i = 0; i < pairs.size(); ++i)
+    {
+        mainChain.push_back(pairs[i].large);
+        pend.push_back(pairs[i].small);
+    }
+
+    if (hasStraggler)
+        pend.push_back(stragglerIdx);
+
+    // Insert pend using Jacobsthal order, bounding search to partner (or end for straggler)
+    std::vector<size_t> order = buildInsertionOrder(pend.size());
+    for (size_t k = 0; k < order.size(); ++k)
+    {
+        size_t pendIdx = order[k];
+        size_t valueIdx = pend[pendIdx];
+
+        // By definition, the first pend element leads the chain with zero comparisons.
+        if (pendIdx == 0)
+        {
+            mainChain.insert(mainChain.begin(), valueIdx);
+            continue;
+        }
+
+        size_t boundPos;
+        if (pendIdx < pairs.size())
+        {
+            size_t partnerValue = pairs[pendIdx].large;
+            std::vector<size_t>::iterator boundIt = std::find(mainChain.begin(), mainChain.end(), partnerValue);
+            boundPos = static_cast<size_t>(boundIt - mainChain.begin());
+        }
+        else
+        {
+            boundPos = mainChain.size();
+        }
+
+        size_t pos = binarySearchIdx(iters, mainChain, valueIdx, 0, boundPos, lessThan);
         mainChain.insert(mainChain.begin() + pos, valueIdx);
     }
 
@@ -218,7 +370,19 @@ void PmergeMe::sortList(std::list<int>& data)
     if (data.size() <= 1)
         return;
 
-    std::vector<int> tmp(data.begin(), data.end());
-    sortVector(tmp);
-    data.assign(tmp.begin(), tmp.end());
+    std::vector<std::list<int>::iterator> iters;
+    iters.reserve(data.size());
+    for (std::list<int>::iterator it = data.begin(); it != data.end(); ++it)
+        iters.push_back(it);
+
+    std::vector<size_t> indices(iters.size());
+    for (size_t i = 0; i < indices.size(); ++i)
+        indices[i] = i;
+
+    mergeInsertList(iters, indices);
+
+    std::list<int> sorted;
+    for (size_t i = 0; i < indices.size(); ++i)
+        sorted.push_back(*iters[indices[i]]);
+    data.swap(sorted);
 }

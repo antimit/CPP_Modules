@@ -171,6 +171,12 @@ bool BitcoinExchange::extractAndStorePriceEntry(const std::string& line, char se
     return true;
 }
 
+/// @brief Retrieves the Bitcoin exchange rate for a given date.
+///        If the exact date is not present in the database, the rate from the
+///        closest earlier available date is returned. If the given date is
+///        earlier than all stored dates, the earliest available rate is used.
+/// @param date Date in YYYY-MM-DD format for which the exchange rate is requested.
+/// @return The applicable Bitcoin exchange rate for the given date.
 double BitcoinExchange::retrieveRateForDate(const std::string& date) const
 {
     std::map<std::string, double>::const_iterator exact = priceHistory.find(date);
