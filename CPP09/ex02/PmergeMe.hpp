@@ -32,7 +32,7 @@ class PmergeMe
 
     // Core Ford-Johnson recursive implementation
     void mergeInsertVector(std::vector<int>& vals, std::vector<size_t>& indices);
-    void mergeInsertList(std::vector<std::list<int>::iterator>& iters, std::vector<size_t>& indices);
+    void mergeInsertList(std::list<ListNodeRef>& nodes);
 };
 
 #endif

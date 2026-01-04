@@ -22,7 +22,7 @@ bool validateNumber(const std::string& arg)
     
     errno = 0;
     long value = strtol(arg.c_str(), NULL, 10);
-    if (errno == ERANGE || value > INT_MAX || value <= 0)
+    if (errno == ERANGE || value > INT_MAX || value < 0)
         return false;
     
     return true;
